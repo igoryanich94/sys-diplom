@@ -1,0 +1,8 @@
+---
+- name: Install and configure nginx
+  hosts: web_wm
+  become: true
+  roles:
+  - nginx
+
+...

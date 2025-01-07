@@ -1,0 +1,3 @@
+---
+zabbix_listener = 127.0.0.1
+zabbix_server_address = 12345

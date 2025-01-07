@@ -1,0 +1,35 @@
+---
+- name: Установка репозиториев Zabbix
+  ansible.builtin.get_url:
+    url: https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+    dest: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+    mode: 777
+
+- name: install repo
+  ansible.builtin.apt:
+    deb: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+
+- name: remove repo file
+  ansible.builtin.file:
+    path: /tmp/zabbix-release_3.0-2
+    state: absent
+
+- name: update cache
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: install zabbix-agent
+  ansible.builtin.apt:
+    name:
+    - zabbix-agent2
+    state: present 
+  notify: enable zabbix-agent
+
+- name: Copy configuration file
+  ansible.builtin.template:
+    src: zabbix_agent.j2
+    dest: /etc/zabbix/zabbix_agent2.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart zabbix-agent

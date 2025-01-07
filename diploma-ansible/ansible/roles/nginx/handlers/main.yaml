@@ -1,0 +1,7 @@
+---
+- name: enable nginx
+  service:
+    name: nginx # required. Name of the service.
+    enabled: yes # not required. Whether the service should start on boot. B(At least one of state and enabled are required.)
+  
+

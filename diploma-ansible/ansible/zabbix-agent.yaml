@@ -1,0 +1,11 @@
+---
+- name: Install and configure zabbix-agent
+  hosts: all
+  become: yes
+  vars:
+  - zabbix_server_address: 12345    
+  roles:
+  - zabbix-agent
+
+
+...

@@ -1,0 +1,46 @@
+---
+
+- block:
+  - name: Установка NGINX на ВМ
+    ansible.builtin.apt:
+      name:
+        - nginx
+      state: present
+    notify: enable nginx
+    
+  - name: Создание директории /var/www/diploma
+    ansible.builtin.file:
+      path: /var/www/diploma
+      state: directory
+
+  - name: Копирование шаблона сайта в директорию
+    ansible.builtin.template:
+      src: index.j2
+      dest: /var/www/diploma/index.html
+      owner: root
+      group: root
+
+  - name: Копирование файла настроек в директорию /etc/nginx/sites-available
+    ansible.builtin.copy:
+      src: files/diploma_http
+      dest: /etc/nginx/sites-available/diploma_http
+      owner: root
+      group: root
+
+  - name: Удаление линка default из /etc/nginx/sites-enabled
+    ansible.builtin.file:
+      path: /etc/nginx/sites-enabled/default
+      state: absent
+
+  - name: создание линка diploma_http в /etc/nginx/sites-enabled
+    ansible.builtin.file:
+      src: /etc/nginx/sites-available/diploma_http
+      dest: /etc/nginx/sites-enabled/diplima_http
+      owner: root
+      group: root
+      state: link
+
+  - name: reload nginx
+    ansible.builtin.service:
+      name: nginx
+      state: reloaded  
