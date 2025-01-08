@@ -1,17 +1,29 @@
 ---
 - name: Скачивание Filebeat
   ansible.builtin.get_url:
-    url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.9.3-i386.deb
-    dest: /tmp/filebeat-7.9.3-i386.deb
+    url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.9.3-amd64.deb
+    dest: /tmp/filebeat-7.9.3-amd64.deb
     mode: 777
 
 - name: Установка Filebeat
   ansible.builtin.apt:
-    deb: /tmp/filebeat-7.9.3-i386.deb
+    deb: /tmp/filebeat-7.9.3-amd64.deb
+  notify: enable filebeat
 
 - name: Удаление deb-пакета
   ansible.builtin.file:
-    path: /tmp/filebeat-7.9.3-i386.deb
+    path: /tmp/filebeat-7.9.3-amd64.deb
     state: absent
+
+
+- name: Копирование файла конфигурации в /etc/filebeat/
+  ansible.builtin.template:
+    src: filebeat.j2
+    dest: /etc/filebeat/filebeat.yml
+    owner: root
+    group: root
+    mode: 0600
+  notify: restart filebeat
+
 
       

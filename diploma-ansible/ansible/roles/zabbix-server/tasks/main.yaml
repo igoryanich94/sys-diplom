@@ -1,0 +1,93 @@
+---
+- name: Установка репозиториев Zabbix
+  ansible.builtin.get_url:
+    url:  https://repo.zabbix.com/zabbix/7.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+    dest: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+    mode: 0777
+
+- name: install repo
+  ansible.builtin.apt:
+    deb: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+
+- name: remove repo file
+  ansible.builtin.file:
+    path: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+    state: absent
+
+- name: update cache
+  ansible.builtin.apt:
+    update_cache: true
+
+### Иду чисто по инструкции с офф сайта zabbix
+
+- name: Установка zabbix-server и периферии
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - postgresql
+    - apache2
+    - zabbix-server-pgsql
+    - zabbix-frontend-php
+    - php8.3-pgsql
+    - zabbix-apache-conf
+    - zabbix-sql-scripts
+    - zabbix-agent2
+    - zabbix-agent2-plugin-*
+
+- name: Проверка на наличие существующей БД zabbix
+  ansible.builtin.shell:
+    sudo -u postgres psql -c "\du" | grep -o zabbix
+  register: zabbix_user
+
+- name: Вывод результата проверки
+  ansible.builtin.debug:
+    msg: "ZabbixDB is already created!!!"
+  when: "'zabbix' in zabbix_user.stdout"
+
+- name: Создаем пользователя базы данных
+  ansible.builtin.expect:
+    command: sudo -u postgres createuser --pwprompt zabbix
+    responses:
+        "Enter password for new role":
+            - "{{ zabbdb_pass }}"
+        "Enter it again":
+            - "{{ zabbdb_pass }}"
+  when: "'zabbix' not in zabbix_user.stdout"
+
+- name: Создаем базу данных
+  ansible.builtin.command:
+    cmd: sudo -u postgres createdb -O zabbix zabbix 
+  when: "'zabbix' not in zabbix_user.stdout"
+
+- name: Импортируем схемы инициализации и данные
+  ansible.builtin.shell: zcat /usr/share/zabbix-sql-scripts/postgresql/server.sql.gz | sudo -u zabbix psql zabbix 
+  args:
+    executable: /bin/bash
+
+- name: Конфигурация /etc/zabbix/zabbix_server.conf 
+  ansible.builtin.lineinfile:
+    path: /etc/zabbix/zabbix_server.conf
+    regexp: '^DBPassword='
+    line: DBPassword={{ zabbdb_pass }}
+
+- name: Перезагрузка служб
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: restarted
+  loop:
+    - zabbix-server
+    - zabbix-agent2
+    - apache2
+
+- name: Запуск служб
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: yes
+  loop:
+    - zabbix-server
+    - zabbix-agent2
+    - apache2
+    
+
+    

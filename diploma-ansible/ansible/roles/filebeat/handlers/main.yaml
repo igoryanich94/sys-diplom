@@ -1,0 +1,10 @@
+---
+- name: enable filebeat
+  ansible.builtin.service:
+    name: filebeat
+    enabled: yes
+
+- name: restart filebeat
+  ansible.builtin.service:
+    name: filebeat
+    state: restarted

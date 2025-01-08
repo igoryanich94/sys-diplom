@@ -1,0 +1,5 @@
+---
+kibana_host_address: 12345
+elastic_host_address: 23451
+nginx_accesslog_path: /var/log/nginx/access.log
+nginx_errorlog_path: /var/log/nginx/error.log

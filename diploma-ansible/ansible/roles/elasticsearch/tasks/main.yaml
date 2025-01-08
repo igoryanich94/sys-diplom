@@ -1,0 +1,32 @@
+---
+# - name: Скачивание дистрибутива elasticsearch
+#   ansible.builtin.get_url:
+#     url: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/e/elasticsearch/elasticsearch-8.9.2-amd64.deb
+#     dest: /tmp/elasticsearch-8.9.2-amd64.deb 
+#     mode: 0777
+
+# - name: Установка дистрибутива elastocsearch
+#   ansible.builtin.apt:
+#     deb: /tmp/elasticsearch-8.9.2-amd64.deb
+
+# - name: Удаление .deb пакета elasticsearch
+#   ansible.builtin.file:
+#     path: /tmp/elasticsearch-8.9.2-amd64.deb
+#     state: absent
+
+- name: Конфигурация файла настроек elasticsearch
+  ansible.builtin.template:
+    src: elasticsearch.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+    owner: root
+    group: elasticsearch
+    mode: 0644
+
+
+### далее делаю как написано на сайте elastic
+- name: enable and restart services
+  ansible.builtin.service:
+    name: elasticsearch
+    enabled: yes
+    state: restarted
+  

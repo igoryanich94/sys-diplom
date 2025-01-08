@@ -1,17 +1,17 @@
 ---
 - name: Установка репозиториев Zabbix
   ansible.builtin.get_url:
-    url: https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb
-    dest: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+    url: https://repo.zabbix.com/zabbix/7.0/ubuntu-arm64/pool/main/z/zabbix-release/zabbix-release_latest_7.0+ubuntu24.04_all.deb
+    dest: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
     mode: 777
 
 - name: install repo
   ansible.builtin.apt:
-    deb: /tmp/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+    deb: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
 
 - name: remove repo file
   ansible.builtin.file:
-    path: /tmp/zabbix-release_3.0-2
+    path: /tmp/zabbix-release_latest_7.0+ubuntu24.04_all.deb
     state: absent
 
 - name: update cache
