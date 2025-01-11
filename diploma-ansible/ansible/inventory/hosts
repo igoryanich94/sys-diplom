@@ -10,3 +10,12 @@
 
 [kibana]
 192.168.58.7
+
+[diploma:children]
+web_wm
+zabbix
+elasticsearch
+kibana
+
+[diploma:vars]
+ansible_ssh_common_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -q \igoryanich@HOSTNAME -o IdentityFile=/home/igoryanich/.ssh/id_rsa -o Port=22 -W %h:22\""
