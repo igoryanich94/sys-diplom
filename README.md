@@ -1,5 +1,5 @@
 
-#  Дипломная работа по профессии «Системный администратор»
+#  Дипломная работа по профессии «Системный администратор» Светиков И.А.
 
 Содержание
 ==========
@@ -33,6 +33,10 @@
 
 Ознакомьтесь со всеми пунктами из этой секции, не беритесь сразу выполнять задание, не дочитав до конца. Пункты взаимосвязаны и могут влиять друг на друга.
 
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img01.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img02.png)
+
 ### Сайт
 Создайте две ВМ в разных зонах, установите на них сервер nginx, если его там нет. ОС и содержимое ВМ должно быть идентичным, это будут наши веб-сервера.
 
@@ -44,24 +48,55 @@
 
 1. Создайте [Target Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/target-group), включите в неё две созданных ВМ.
 
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img03.png)
+
 2. Создайте [Backend Group](https://cloud.yandex.com/docs/application-load-balancer/concepts/backend-group), настройте backends на target group, ранее созданную. Настройте healthcheck на корень (/) и порт 80, протокол HTTP.
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img04.png)
 
 3. Создайте [HTTP router](https://cloud.yandex.com/docs/application-load-balancer/concepts/http-router). Путь укажите — /, backend group — созданную ранее.
 
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img05.png)
+
 4. Создайте [Application load balancer](https://cloud.yandex.com/en/docs/application-load-balancer/) для распределения трафика на веб-сервера, созданные ранее. Укажите HTTP router, созданный ранее, задайте listener тип auto, порт 80.
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img06.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img07.png)
+
 
 Протестируйте сайт
 `curl -v <публичный IP балансера>:80` 
 
+Адрес балансировщика 130.193.46.222
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img08.png)
+
+
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
 
+Адрес заббикс-сервера http://158.160.162.149/zabbix/zabbix.php?action=dashboard.view&dashboardid=366
+
+(Учетные данные сообщю при необходимости)
+
 Настройте дешборды с отображением метрик, минимальный набор — по принципу USE (Utilization, Saturation, Errors) для CPU, RAM, диски, сеть, http запросов к веб-серверам. Добавьте необходимые tresholds на соответствующие графики.
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img09.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img10.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img11.png)
 
 ### Логи
 Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
 
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
+
+Кибана находится по адресу http://158.160.155.68:5601/app/home#/
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img12.png)
+
 
 ### Сеть
 Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.
@@ -72,8 +107,28 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 Исходящий доступ в интернет для ВМ внутреннего контура через [NAT-шлюз](https://yandex.cloud/ru/docs/vpc/operations/create-nat-gateway).
 
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img13.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img14.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img15.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img16.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img17.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img18.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img19.png)
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img20.png)
+
+
 ### Резервное копирование
 Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
+
+![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img21.png)
+
 
 ### Дополнительно
 Не входит в минимальные требования. 
