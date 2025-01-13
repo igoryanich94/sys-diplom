@@ -39,6 +39,7 @@
   ansible.builtin.shell:
     sudo -u postgres psql -c "\du" | grep -o zabbix
   register: zabbix_user
+  ignore_errors: true
 
 - name: Вывод результата проверки
   ansible.builtin.debug:

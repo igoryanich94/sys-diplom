@@ -1,18 +1,32 @@
----
+# ---
+# - name: Проверка на наличие уже установленного пакета elasticsearch 
+# # чтобы по новой пакет не качать
+#   ansible.builtin.shell:
+#     systemctl status elasticsearch.service | grep -o loaded
+#   register: es_install
+
+# - name: Вывод результата проверки
+#   ansible.builtin.debug:
+#     msg: "Elasticsearch is already installed!!!"
+#   when: "'loaded' in es_install.stdout" 
+
 - name: Скачивание дистрибутива elasticsearch
   ansible.builtin.get_url:
-    url: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/e/elasticsearch/elasticsearch-8.9.2-amd64.deb
-    dest: /tmp/elasticsearch-8.9.2-amd64.deb 
+    url: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/e/elasticsearch/elasticsearch-8.17.0-amd64.deb
+    dest: /tmp/elasticsearch-8.17.0-amd64.deb 
     mode: 0777
+  #when: "'loaded' not in es_install.stdout"
 
 - name: Установка дистрибутива elastocsearch
   ansible.builtin.apt:
-    deb: /tmp/elasticsearch-8.9.2-amd64.deb
+    deb: /tmp/elasticsearch-8.17.0-amd64.deb 
+  #when: "'loaded' not in es_install.stdout"
 
 - name: Удаление .deb пакета elasticsearch
   ansible.builtin.file:
-    path: /tmp/elasticsearch-8.9.2-amd64.deb
+    path: /tmp/elasticsearch-8.17.0-amd64.deb 
     state: absent
+  #when: "'loaded' not in es_install.stdout"
 
 - name: Конфигурация файла настроек elasticsearch
   ansible.builtin.template:

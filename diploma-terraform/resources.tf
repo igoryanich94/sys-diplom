@@ -293,6 +293,12 @@ resource "yandex_vpc_security_group" "kibana-sg" {
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    protocol       = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port           = 80
+
+  }
   egress {
     protocol       = "ANY"
     description    = "allow any outputs connection"
@@ -315,4 +321,29 @@ resource "yandex_vpc_security_group" "internal-sg" {
     description    = "outputs"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "yandex_compute_snapshot_schedule" "snapshots" {
+  name = "snapshots"
+
+  schedule_policy {
+    expression = "0 2 * * *"
+  }
+
+  retention_period = "168h"
+
+  snapshot_count = 7
+
+  snapshot_spec {
+    description = "daily-snapshot"
+  }
+
+  disk_ids = [
+    yandex_compute_disk.bastiondisk.id,
+    yandex_compute_disk.elasticdisk.id,
+    yandex_compute_disk.kibanadisk.id,
+    yandex_compute_disk.wm1disk.id,
+    yandex_compute_disk.wm2disk.id,
+    yandex_compute_disk.zabbixdisk.id
+  ]
 }

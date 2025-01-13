@@ -2,12 +2,12 @@
 - name: Скачивание дистрибутива kibana
   ansible.builtin.get_url:
     url: https://mirror.yandex.ru/mirrors/elastic/8/pool/main/k/kibana/kibana-8.17.0-amd64.deb
-    dest: kibana-8.17.0-amd64.deb
+    dest: /tmp/kibana-8.17.0-amd64.deb
     mode: 0777
 
 - name: Установка дистрибутива kibana
   ansible.builtin.apt:
-    deb: kibana-8.17.0-amd64.deb
+    deb: /tmp/kibana-8.17.0-amd64.deb
 
 - name: Удаление .deb пакета kibana
   ansible.builtin.file:

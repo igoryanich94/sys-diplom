@@ -1,5 +1,5 @@
 ---
-kibana_host_address: 12345
-elastic_host_address: 23451
+kibana_host_address: kibana.ru-central1.internal:5601
+elastic_host_address: elasticsearch.ru-central1.internal:9200
 nginx_accesslog_path: /var/log/nginx/access.log
 nginx_errorlog_path: /var/log/nginx/error.log

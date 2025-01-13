@@ -1,2 +1,2 @@
 ---
-zabbix_server_address: 12345
+zabbix_server_address: 172.16.4.3

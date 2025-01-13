@@ -62,8 +62,8 @@ resource "yandex_compute_instance" "elasticsearch" {
   description = "Виртуальная машина для elasticsearch"
   resources {
     cores = 2
-    memory = 2
-    core_fraction = 20
+    memory = 4
+    core_fraction = 50
   }
   boot_disk {
     disk_id = yandex_compute_disk.elasticdisk.id
@@ -89,8 +89,8 @@ resource "yandex_compute_instance" "kibana" {
   description = "Виртуальная машина для kibana"
   resources {
     cores = 2
-    memory = 2
-    core_fraction = 20
+    memory = 4
+    core_fraction = 50
   }
   boot_disk {
     disk_id = yandex_compute_disk.kibanadisk.id

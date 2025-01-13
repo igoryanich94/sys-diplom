@@ -1,15 +1,15 @@
 [web_wm]
-192.168.58.3
-192.168.58.4
+wm1.ru-central1.internal
+wm2.ru-central1.internal
 
 [zabbix]
-192.168.58.5
+zabbix.ru-central1.internal
 
 [elasticsearch]
-192.168.58.6
+elasticsearch.ru-central1.internal
 
 [kibana]
-192.168.58.7
+kibana.ru-central1.internal
 
 [diploma:children]
 web_wm
@@ -18,4 +18,4 @@ elasticsearch
 kibana
 
 [diploma:vars]
-ansible_ssh_common_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -q \igoryanich@HOSTNAME -o IdentityFile=/home/igoryanich/.ssh/id_rsa -o Port=22 -W %h:22\""
+ansible_ssh_common_args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ProxyCommand=\"ssh -o StrictHostKeyChecking=no -q \igoryanich@158.160.152.179 -o IdentityFile=/home/igoryanich/.ssh/id_rsa -o Port=22 -W %h:22\""
