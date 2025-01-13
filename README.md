@@ -76,7 +76,7 @@
 ### Мониторинг
 Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
 
-Адрес заббикс-сервера http://158.160.162.149/zabbix/zabbix.php?action=dashboard.view&dashboardid=366
+Адрес заббикс-сервера http://158.160.161.8/zabbix/zabbix.php?action=dashboard.view&dashboardid=366
 
 (Учетные данные сообщю при необходимости)
 
@@ -93,7 +93,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
 
-Кибана находится по адресу http://158.160.155.68:5601/app/home#/
+Кибана находится по адресу http://158.160.130.4:5601/app/home#/
 
 ![img](https://github.com/igoryanich94/sys-diplom/blob/diplom-zabbix/diploma_image/img12.png)
 
